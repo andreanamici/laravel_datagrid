@@ -1,0 +1,23 @@
+{
+    "name": "andreanamici/laravel_datagrid",
+    "description": "Libreria di paginazione basata su eloquent",
+    "type": "package",
+    "authors": [
+        {
+            "name": "Andrea Namici",
+            "email": "andrea.namici@gmail.com"
+        }
+    ],
+    "autoload":{
+      "psr-4": {"WS\\Datagrid\\": "src/"}
+    },
+    "extra": {
+      "laravel": {
+          "providers": [
+              "WS\\Datagrid\\DatagridServiceProvider"
+          ]
+      }
+  },
+    "minimum-stability": "dev",
+    "require": {}
+}
