@@ -3,6 +3,7 @@
 namespace WS\Datagrid;
 use Illuminate\Support\Arr;
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use WS\Datagrid\Exceptions\LoopInterruptException;
 
 class Datagrid
@@ -108,8 +109,11 @@ class Datagrid
     }
 
     protected function _apply_raw()
-    {
-        $this->model = $this->model->addSelect("*");
+    {        
+        if(!$this->model->getQuery()->columns){
+            $this->model = $this->model->addSelect("*");
+        }
+
         foreach ($this->columns as $col) {
 
             if (!$col->isRaw()) {
