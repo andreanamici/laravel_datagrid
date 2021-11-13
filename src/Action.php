@@ -15,6 +15,7 @@ class Action
     private $urlModifier;
     private $route;
     private $routeAttrs;
+    private $routeParams;
     private $parent; // il datagrid parent
     private $modifier = null;
 
@@ -38,13 +39,15 @@ class Action
 
     /**
      * Imposta la rotta a cui punta l'azione, se settata sovrascrive la closure definita nel costruttore
-     * @param mixed $route la rotta
-     * @param Array $attrs un array di attributi, i valori devono rispecchiare eventuali colonne presenti nel datagrid
+     * @param mixed $route  la rotta
+     * @param array $attrs  un array di attributi, i valori devono rispecchiare eventuali colonne presenti nel datagrid
+     * @param array $params un array di parametri passati alla rotta
      */
-    public function setRoute($route,array $attrs)
+    public function setRoute($route,array $attrs, array $params = [])
     {
         $this->route = $route;
         $this->routeAttrs = $attrs;
+        $this->routeParams = $params;
     }
 
     /**
@@ -159,6 +162,9 @@ class Action
         {
             $params[] = $item->{$param};
         }
+
+        $params = array_merge($params, $this->routeParams);
+        
         return route($this->route,$params);
     }
 
