@@ -3,6 +3,7 @@
 namespace WS\Datagrid;
 
 use \App\Services\Auth;
+use Closure;
 
 class Action
 {
@@ -18,6 +19,7 @@ class Action
     private $routeParams;
     private $parent; // il datagrid parent
     private $modifier = null;
+    private $customRender;
 
     /**
      * Costruttore dell'azione, accetta come argomento la closure che definisce l'url a cui puntare
@@ -48,6 +50,11 @@ class Action
         $this->route = $route;
         $this->routeAttrs = $attrs;
         $this->routeParams = $params;
+    }
+
+    public function setCustomRender(Closure $callback)
+    {
+        $this->customRender = $callback;
     }
 
     /**
@@ -180,6 +187,12 @@ class Action
         }
 
         $data['icon'] = $this->icon;
+        
+        if($this->customRender)
+        {
+            $customRender = $this->customRender;
+            return $customRender($item);
+        }
 
         $urlModifier = $this->urlModifier;
         $url = $this->route ? $this->getRoute($item) : ($urlModifier ? $urlModifier($item) : null);
