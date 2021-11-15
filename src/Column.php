@@ -21,8 +21,10 @@ class Column
     private $url = null;
     private $route = null;
     private $routeParams = [];
+    private $routeExtraParams = [];
     private $isRelation = true;
     private $sortable = true;
+    private $condition = null;
 
     /**
      * Datagrid instanziato
@@ -40,12 +42,26 @@ class Column
     /**
      * Imposta la rotta associata al colonna corrente
      */
-    public function setRoute($route, array $params = [])
+    public function setRoute($route, array $params = [], array $routeExtraParams = [])
     {
         $this->route = $route;
         $this->routeParams = $params;
+        $this->routeExtraParams = $routeExtraParams;
         return $this;
     }
+
+     /**
+     * Imposta una condizione per l'azione
+     * @param Closure $condition closure
+     * Accetta come argomento la riga corrente 
+     * @return Action Ritorna l'azione corrente
+     */
+    public function setRouteCondition(\Closure $condition)
+    {
+        $this->condition = $condition;
+        return $this;
+    }
+
 
     /**
      * Imposta il datagrid padre della colonna
@@ -84,10 +100,21 @@ class Column
         if (!$this->route) {
             return;
         }
+
+        if ($this->condition) {
+            $condition = $this->condition;
+            $return = $condition($item);
+            if ($return === false) {
+                return;
+            }
+        }
+
         $params = [];
         foreach ($this->routeParams as $param) {
             $params[] = Datagrid::resolve($item, $param);
         }
+        
+        $params = array_merge($params, $this->routeExtraParams);
         $this->url = route($this->route, $params);
     }
     /**

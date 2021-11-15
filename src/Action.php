@@ -104,13 +104,12 @@ class Action
         return $this;
     }
 
-      /**
+    /**
      * Imposta una condizione per l'azione
      * @param Closure $condition closure
      * Accetta come argomento la riga corrente 
      * @return Action Ritorna l'azione corrente
      */
-
     public function setCondition(\Closure $condition)
     {
         $this->condition = $condition;
