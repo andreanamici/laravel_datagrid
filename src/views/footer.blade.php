@@ -1,10 +1,7 @@
-
-@if(count($items) > 0)
-<tfoot>
-    <tr>
-        <td colspan="{{count($cols)}}">
-          {{$items->links('datagrid::pagination')}}
-        </td>
-    </tr>
-</tfoot>
+@if(count($items) > $per_page)
+<tr>
+  <th colspan="{{count($cols)}}">
+    {{$items->links('datagrid::pagination')}}
+  </th>
+</tr>
 @endif
